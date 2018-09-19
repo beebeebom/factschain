@@ -173,10 +173,10 @@ namespace eosio {
        * @post The amount of this asset is multiplied by a
        */
       asset& operator*=( int64_t a ) {
-         eosio_assert( a == 0 || (amount * a) / a == amount, "multiplication overflow or underflow" );
-         amount *= a;
-         eosio_assert( -max_amount <= amount, "multiplication underflow" );
-         eosio_assert( amount <= max_amount,  "multiplication overflow" );
+         int128_t tmp = (int128_t)amount * (int128_t)a;
+         eosio_assert( tmp <= max_amount, "multiplication overflow" );
+         eosio_assert( tmp >= -max_amount, "multiplication underflow" );
+         amount = (int64_t)tmp;
          return *this;
       }
 
