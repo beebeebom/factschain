@@ -218,6 +218,8 @@ namespace eosio {
        * @post The amount of this asset is divided by a
        */
       asset& operator/=( int64_t a ) {
+         eosio_assert( a != 0, "divide by zero" );
+         eosio_assert( !(amount == std::numeric_limits<int64_t>::min() && a == -1), "signed division overflow" );
          amount /= a;
          return *this;
       }
